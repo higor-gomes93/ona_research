@@ -1,0 +1,56 @@
+---
+Teste de Grafos
+---
+
+```{r}
+install.packages("igraph")
+install.packages("dplyr")
+
+library(igraph)
+library(dplyr)
+install.packages("hash")
+library(hash)
+library(RColorBrewer)
+```
+
+```{r}
+dados = read.csv("dados.csv", sep = ",")
+dados = as.data.frame(dados)
+dados = filter(dados, dados[,3] > 3)
+```
+
+```{r}
+vetor = c()
+i = 1
+while (i < 292) {
+    vetor = append(vetor, dados[i, 1])
+    vetor = append(vetor, dados[i, 2])
+    i = i + 1
+}
+```
+
+```{r}
+conta_times = c()
+conta_pesos = c()
+i = 1
+while (i < 292) {
+    conta_times = append(conta_times, dados[i, 4])
+    conta_pesos = append(conta_pesos, dados[i, 5])
+    i = i + 1
+}
+```
+
+```{r}
+pesos = read.csv("pesos.csv", sep = ",")
+grafo = graph(edges = vetor, directed = F)
+V(grafo)$times = pesos[, 3]
+V(grafo)$peso = pesos[, 2]
+cores = as.factor(pesos[,3])
+V(grafo)$cores = cores
+tkplot(grafo, vertex.size = vertex_attr(grafo)$peso)
+```
+
+```{r}
+neighborhood(grafo, 1, mode = c("all"))
+```
+
